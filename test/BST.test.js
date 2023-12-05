@@ -1,4 +1,5 @@
 const Tree = require("../js/BST");
+const Node = require("../js/nodeModel");
 
 test("driver test", () => {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
@@ -108,4 +109,31 @@ test("test postOrder traversal", () => {
   expect(tree.postOrder()).toStrictEqual([
     4, 2, 10, 8, 6, 16, 14, 22, 20, 18, 12,
   ]);
+});
+
+test("test tree height", () => {
+  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 56, 77, 88];
+  const tree = new Tree(list);
+
+  expect(tree.height()).toBe(4);
+  expect(tree.height(tree.find(14))).toBe(2);
+});
+
+test("test tree depth", () => {
+  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 56, 77, 88];
+  const tree = new Tree(list);
+
+  expect(tree.depth()).toBe(0);
+  expect(tree.depth(tree.find(14))).toBe(1);
+});
+
+test("test tree balance", () => {
+  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 56, 77, 88];
+  const tree = new Tree(list);
+
+  expect(Tree.isBalanced(tree)).toBe(true);
+  tree.find(8).right = new Node(8.5);
+  expect(Tree.isBalanced(tree)).toBe(false);
+  Tree.rebalance(tree);
+  expect(Tree.isBalanced(tree)).toBe(true);
 });

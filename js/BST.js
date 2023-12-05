@@ -17,6 +17,10 @@ class Tree {
     return util.findValue(this.root, searchValue);
   };
 
+  findLargestNode = () => {
+    return util.findLargestNode(this.root);
+  };
+
   levelOrder = (callback, useLoop = true) => {
     return util.levelOrdering(this.root, callback, useLoop);
   };
@@ -41,32 +45,19 @@ class Tree {
     return util.nodeDepth(node, this.root);
   };
 
-  isBalanced = () => {
-    //TODO
-  };
-
-  rebalance = () => {
-    //TODO
-  };
-
   printTree = () => {
     Tree.prettyPrint(this.root);
   };
 
   //Utility methods
-  static buildTree = (array) => {
-    return util.sortedArrayToBST(Tree.createValidArray(array));
+  static isBalanced = (tree) => {
+    return util.isTreeBalanced(tree.root);
   };
-
-  static createValidArray = (array) => {
-    return [...new Set(array)].sort((a, b) => {
-      if (Number(a) < Number(b)) {
-        return -1;
-      } else if (Number(b) > Number(a)) {
-        return 1;
-      }
-      return 0;
-    });
+  static rebalance = (tree) => {
+    return util.rebalanceTree(tree);
+  };
+  static buildTree = (array) => {
+    return util.sortedArrayToBST(util.createValidArray(array));
   };
 
   static prettyPrint = (node, prefix = "", isLeft = true) => {

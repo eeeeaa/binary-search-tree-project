@@ -107,6 +107,29 @@ function nodeDepth(node, rootNode) {
   return nodePathFromRoot(rootNode, node).length - 1;
 }
 
+function isTreeBalanced(node) {
+  //TODO
+  if (node === null) return true;
+
+  const left = nodeHeight(node.left);
+  const right = nodeHeight(node.right);
+
+  if (Math.abs(left - right) > 1) {
+    return false;
+  } else {
+    return isTreeBalanced(node.left) && isTreeBalanced(node.right);
+  }
+}
+
+function rebalanceTree(tree) {
+  //TODO
+  if (isTreeBalanced(tree.root)) return tree;
+
+  const treeArray = createValidArray(preorder(tree.root));
+
+  tree.root = sortedArrayToBST(treeArray);
+}
+
 function nodePathFromRoot(rootNode, node, array = []) {
   if (rootNode === null) return null;
   array.push(rootNode);
@@ -124,6 +147,11 @@ function findValue(node, searchValue) {
   if (node.value === searchValue) return node;
   if (searchValue < node.value) return findValue(node.left, searchValue);
   if (searchValue > node.value) return findValue(node.right, searchValue);
+}
+
+function findLargestNode(node) {
+  if (node.right === null) return node;
+  return findLargestNode(node.right);
 }
 
 function insertValue(root, value) {
@@ -151,22 +179,6 @@ function deleteValue(root, value) {
     root.right = deleteValue(root.right, value);
     return root;
   }
-
-  //If this node is to be deleted, check for delete cases
-  /** three delete cases
-   *
-   * 1. node have no children -> just delete it
-   * 2. node have one children -> swap place of node with its child and delete the node
-   * 2. node have two children:
-   *
-   *    a. find largest value in node's left sub-tree OR smallest value in right sub-tree
-   *        - choose this value because it wont change tree balance since its still
-   *          larger than all left sub-tree values and less than all the right sub-tree value
-   *
-   *    b. swap place of node with that value
-   *
-   *    c. delete the node with case 1 or 2
-   */
 
   if (root.left === null) {
     //left child empty or no children
@@ -242,6 +254,17 @@ function sortedArrayToBST(array) {
   return root;
 }
 
+function createValidArray(array) {
+  return [...new Set(array)].sort((a, b) => {
+    if (Number(a) < Number(b)) {
+      return -1;
+    } else if (Number(b) > Number(a)) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
 module.exports = {
   preorder,
   inorder,
@@ -253,4 +276,8 @@ module.exports = {
   insertValue,
   deleteValue,
   sortedArrayToBST,
+  isTreeBalanced,
+  rebalanceTree,
+  createValidArray,
+  findLargestNode,
 };
